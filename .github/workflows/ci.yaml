@@ -51,7 +51,17 @@ jobs:
           node-version: 22
           cache: pnpm
 
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: nm-cache-web
+        with:
+          path: |
+            node_modules
+            apps/web/node_modules
+          key: ${{ runner.os }}-nm-web-${{ hashFiles('pnpm-lock.yaml') }}
+
       - run: pnpm install --frozen-lockfile
+        if: steps.nm-cache-web.outputs.cache-hit != 'true'
 
       - name: Lint
         run: pnpm --filter requete-web lint
@@ -76,7 +86,27 @@ jobs:
           node-version: 22
           cache: pnpm
 
+      - name: Cache node_modules
+        uses: actions/cache@v4
+        id: nm-cache-docs
+        with:
+          path: |
+            node_modules
+            apps/docs/node_modules
+          key: ${{ runner.os }}-nm-docs-${{ hashFiles('pnpm-lock.yaml') }}
+
       - run: pnpm install --frozen-lockfile
+        if: steps.nm-cache-docs.outputs.cache-hit != 'true'
+
+      - name: Cache Docusaurus build
+        uses: actions/cache@v4
+        with:
+          path: |
+            apps/docs/.cache
+            apps/docs/.docusaurus
+          key: ${{ runner.os }}-docusaurus-${{ hashFiles('apps/docs/src/**', 'apps/docs/docs/**', 'apps/docs/docusaurus.config.*', 'apps/docs/sidebars.*') }}
+          restore-keys: |
+            ${{ runner.os }}-docusaurus-
 
       - name: Lint
         run: pnpm --filter requete-docs lint
