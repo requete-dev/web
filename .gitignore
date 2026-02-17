@@ -1,23 +1,11 @@
-# dependencies
-node_modules/
+# Dependencies
+**/node_modules/
 
-# env files
-.env
-.env.*
-!.env.example
+**/.cache-loader
 
-# next.js
-.next/
-out/
-next-env.d.ts
-
-# docusaurus
-.docusaurus/
-build/
-
-# build artifacts
-*.tsbuildinfo
-.cache-loader
+**/npm-debug.log*
+**/yarn-debug.log*
+**/yarn-error.log*
 
 # misc
 .DS_Store
