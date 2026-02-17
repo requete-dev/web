@@ -1,5 +1,7 @@
 name = "requete-docs"
 compatibility_date = "2026-02-17"
+workers_dev = true
+preview_urls = true
 
 [assets]
 directory = "./build"
