@@ -5,7 +5,7 @@ title: "Overview"
 
 # LSP Validation Rules
 
-Requete provides real-time validation as you write code, surfacing errors and warnings directly in your IDE. Rules are enforced at three levels: edit time (inline diagnostics as you type), build time ([CLI](/reference/cli) validation before artifact generation), and CI time (automated checks in continuous integration).
+Requete provides real-time validation as you write code, surfacing errors and warnings directly in your IDE. Rules are enforced at three levels: edit time (inline diagnostics as you type), build time ([CLI](/docs/reference/cli) validation before artifact generation), and CI time (automated checks in continuous integration).
 
 **What validation helps you with:**
 

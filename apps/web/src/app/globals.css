@@ -41,7 +41,9 @@
 .shiki-wrapper pre,
 .shiki-wrapper pre[style],
 .shiki-wrapper code {
+  /* biome-ignore lint/complexity/noImportantStyles: needed to override Shiki inline styles */
   background: transparent !important;
+  /* biome-ignore lint/complexity/noImportantStyles: needed to override Shiki inline styles */
   background-color: transparent !important;
   margin: 0;
   padding: 0;
@@ -59,7 +61,8 @@
   font-style: normal;
   font-weight: 100 900;
   font-display: swap;
-  src: url("https://fonts.gstatic.com/s/inter/v18/UcCo3FwrK3iLTcviYwY.woff2") format("woff2");
+  src: url("https://fonts.gstatic.com/s/inter/v18/UcCo3FwrK3iLTcviYwY.woff2")
+    format("woff2");
 }
 
 /* JetBrains Mono */
