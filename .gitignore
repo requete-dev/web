@@ -1,0 +1,25 @@
+# dependencies
+node_modules/
+
+# env files
+.env
+.env.*
+!.env.example
+
+# next.js
+.next/
+out/
+next-env.d.ts
+
+# docusaurus
+.docusaurus/
+build/
+
+# build artifacts
+*.tsbuildinfo
+.cache-loader
+
+# misc
+.DS_Store
+*.log
+.claude/
