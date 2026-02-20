@@ -174,7 +174,7 @@ Session uses engine 'spark' but requete.yaml for pipeline 'analytics' is missing
 
 ### Rule 10.5: Missing JAVA_HOME for Spark
 
-**Rule:** If a session node uses `engine="spark"`, the pipeline's `requete.yaml` must set `JAVA_HOME` in the `env` section — either under `env.spark` or `env.common`. Without it, the JVM cannot be located and the spark engine will fail to start. See [Engine Lifecycle & Orchestration](/hub/orchestrator#environment-variable-resolution) for how env vars are resolved.
+**Rule:** If a session node uses `engine="spark"`, the pipeline's `requete.yaml` must set `JAVA_HOME` in the `env` section — either under `env.spark` or `env.common`. Without it, the JVM cannot be located and the spark engine will fail to start. See [requete.yaml env configuration](/docs/reference/requete-yaml#env) for how env vars are resolved.
 
 **Severity:** Error
 
