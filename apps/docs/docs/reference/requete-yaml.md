@@ -38,6 +38,14 @@ dependencies:
   - pyspark==3.5.1
   - pandas>=2.0
   - requests
+
+# Optional: Environment variables passed to engine runtimes.
+# common: set for all engines; engine-specific keys merge on top.
+env:
+  common:
+    TMPDIR: "/tmp/requete/python-workdir"
+  spark:
+    JAVA_HOME: "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home"
 ```
 
 ## Fields
@@ -80,6 +88,28 @@ dependencies:
 
 Standard pip version specifiers are supported: `==`, `>=`, `<=`, `~=`, `!=`, etc.
 
+### env
+
+**Optional.** Environment variables passed to engine runtimes. This is a nested mapping with two levels:
+
+- **`common`** — Variables set for every engine in this pipeline.
+- **Engine-specific keys** (`spark`, `duckdb`, etc.) — Variables that apply only when that engine is spawned. These merge on top of `common`; if a key appears in both, the engine-specific value wins.
+
+```yaml
+env:
+  common:
+    TMPDIR: "/tmp/requete/python-workdir"
+
+  spark:
+    JAVA_HOME: "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home"
+    SPARK_LOCAL_DIRS: "/tmp/requete/spark"
+
+  duckdb:
+    DUCKDB_TMPDIR: "/tmp/requete/duckdb"
+```
+
+The most important use case is **`JAVA_HOME`** — Spark requires a JDK, and this tells the engine which installation to use. Without it, the Spark engine may fail to start or pick up an unexpected Java version.
+
 ## Complete Example
 
 ```yaml
@@ -90,6 +120,13 @@ dependencies:
   - pandas>=2.1
   - scikit-learn>=1.3
   - pyarrow>=14.0
+
+env:
+  common:
+    TMPDIR: "/tmp/requete/python-workdir"
+  spark:
+    JAVA_HOME: "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home"
+    SPARK_LOCAL_DIRS: "/tmp/requete/spark"
 ```
 
 ## Discovery
