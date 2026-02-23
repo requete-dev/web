@@ -1,0 +1,11 @@
+name = "requete-web"
+compatibility_date = "2026-02-17"
+workers_dev = true
+preview_urls = true
+
+[assets]
+directory = "./out"
+
+[[routes]]
+pattern = "requete.dev"
+custom_domain = true

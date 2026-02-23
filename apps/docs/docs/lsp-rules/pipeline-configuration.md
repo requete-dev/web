@@ -172,6 +172,56 @@ Session uses engine 'spark' but requete.yaml for pipeline 'analytics' is missing
 
 ---
 
+### Rule 10.5: Missing JAVA_HOME for Spark
+
+**Rule:** If a session node uses `engine="spark"`, the pipeline's `requete.yaml` must set `JAVA_HOME` in the `env` section — either under `env.spark` or `env.common`. Without it, the JVM cannot be located and the spark engine will fail to start. See [requete.yaml env configuration](/docs/reference/requete-yaml#env) for how env vars are resolved.
+
+**Severity:** Error
+
+**Squiggly Location:** Python session decorator line + YAML file line 1
+
+**Valid:**
+
+```yaml
+# requete.yaml
+pipeline: analytics
+dependencies:
+  - pyspark==3.5.0
+env:
+  spark:
+    JAVA_HOME: "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home"
+```
+
+```python
+@nodes.session(tag="spark_dev", pipeline="analytics", engine="spark", env=["dev"])
+def create_session() -> SparkSession: ...
+```
+
+**Invalid:**
+
+```yaml
+# requete.yaml
+pipeline: analytics
+dependencies:
+  - pyspark==3.5.0
+# No env section, or env section without JAVA_HOME
+```
+
+```python
+@nodes.session(tag="spark_dev", pipeline="analytics", engine="spark", env=["dev"])
+def create_session() -> SparkSession: ...
+```
+
+**Error Message:**
+
+```
+JAVA_HOME not set in requete.yaml env section for pipeline 'analytics'. Spark engine requires JAVA_HOME to locate the JVM.
+```
+
+Other env vars (`SPARK_LOCAL_DIRS`, `PYSPARK_SUBMIT_ARGS`, `DUCKDB_TMPDIR`, `TMPDIR`) have built-in defaults and are not validated.
+
+---
+
 ## Appendix: Complete Validation Checklist
 
 When the LSP validates a file, it checks:
@@ -210,6 +260,7 @@ When the LSP validates a file, it checks:
 - [ ] No duplicate `requete.yaml` for same pipeline
 - [ ] `python_version` is supported (if set)
 - [ ] Engine dependencies present in `requete.yaml`
+- [ ] `JAVA_HOME` set in `env` section when spark engine is used
 
 **At Build Time:**
 

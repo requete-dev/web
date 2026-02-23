@@ -17,6 +17,18 @@ python_version: "3.11"
 dependencies:
   - pyspark==3.5.0
   - duckdb>=1.1.0
+  - requete>=0.1.0
+
+env:
+  common:
+    TMPDIR: "/tmp/requete/python-workdir"
+
+  spark:
+    JAVA_HOME: "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home"
+    SPARK_LOCAL_DIRS: "/tmp/requete/spark"
+
+  duckdb:
+    DUCKDB_TMPDIR: "/tmp/requete/duckdb"
 ```
 
 ## Configuration Fields
@@ -62,6 +74,33 @@ Dependencies follow standard pip version specifier syntax:
 - Compatible releases: `pandas~=2.0`
 - No constraint: `requests`
 
+### `env`
+
+**Optional.** Environment variables passed to engine runtimes. The `env` block has a layered structure: variables under `common` are set for all engines, and engine-specific keys merge on top.
+
+```yaml
+env:
+  common:
+    TMPDIR: "/tmp/requete/python-workdir"
+
+  spark:
+    JAVA_HOME: "/Library/Java/JavaVirtualMachines/jdk-21.jdk/Contents/Home"
+    SPARK_LOCAL_DIRS: "/tmp/requete/spark"
+    PYSPARK_SUBMIT_ARGS: >-
+      --conf spark.local.dir=/tmp/requete/spark
+      --conf spark.sql.warehouse.dir=/tmp/requete/spark/warehouse
+      pyspark-shell
+
+  duckdb:
+    DUCKDB_TMPDIR: "/tmp/requete/duckdb"
+```
+
+The most important use case is **`JAVA_HOME`** — Spark requires a JDK, and this is how you point the engine at the correct installation on your machine. Without it, the Spark engine may fail to start or pick up an unexpected Java version.
+
+Other common uses include configuring temp/scratch directories for engines and passing Spark submit arguments via `PYSPARK_SUBMIT_ARGS`.
+
+When the engine process is spawned, Requete merges `common` with the engine-specific section. For example, a Spark engine would see both `TMPDIR` (from `common`) and `JAVA_HOME` (from `spark`). Engine-specific values take precedence if a key appears in both `common` and the engine section.
+
 ## How Configuration Drives Engine Spawning
 
 When Requete executes a pipeline, it spawns an isolated Python engine process using [uv](https://github.com/astral-sh/uv). The `requete.yaml` fields map directly to the spawning command:
@@ -85,6 +124,8 @@ Requete constructs a command equivalent to:
 ```
 uv tool run --from requete-engine --with pyspark==3.5.0 --with duckdb>=1.1.0 --python 3.11 requete-engine
 ```
+
+Environment variables from the `env` section are also passed to the spawned process. Requete merges the `common` block with the engine-specific block (e.g., `spark`) so the engine receives the full set of variables.
 
 This means:
 - **Each pipeline gets its own isolated environment.** Dependencies for one pipeline never conflict with another.
@@ -127,5 +168,6 @@ When you modify `requete.yaml`, Requete detects the configuration change and res
 - Python version
 - Added, removed, or updated dependencies
 - Pipeline name changes
+- Environment variable changes
 
 You do not need to manually restart the engine after editing `requete.yaml`.
