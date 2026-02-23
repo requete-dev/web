@@ -10,6 +10,11 @@ export const metadata: Metadata = {
   },
   description:
     "Build, test, and deploy data pipelines using Python decorators. Define DAGs with @nodes, test with @tests, run on Spark, DuckDB, or Snowflake.",
+  icons: {
+    icon: "/logo.svg",
+    shortcut: "/logo.svg",
+    apple: "/logo.svg",
+  },
 };
 
 export default function RootLayout({
