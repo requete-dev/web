@@ -5,7 +5,7 @@ import { themes as prismThemes } from "prism-react-renderer";
 const config: Config = {
   title: "Requete",
   tagline: "Build, test, and deploy data pipelines with Python decorators",
-  favicon: "img/favicon.ico",
+  favicon: "img/logo.svg",
 
   future: {
     v4: true,

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { Button } from "@/components/ui/Button";
@@ -12,9 +13,7 @@ export function Header() {
     <header className="fixed top-0 left-0 right-0 z-50 border-b border-gray-800/50 bg-surface-900/80 backdrop-blur-xl">
       <div className="mx-auto max-w-6xl px-6 flex items-center justify-between h-16">
         <Link href="/" className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-lg bg-primary-600 flex items-center justify-center text-white font-bold text-sm">
-            R
-          </div>
+          <Image src="/logo.svg" alt="Requete" width={32} height={32} />
           <span className="text-lg font-semibold text-white">Requete</span>
         </Link>
 
